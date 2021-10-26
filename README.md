@@ -65,6 +65,10 @@ In project these technologies have been used:
    </tr>
   </table>
 
+The structure of the database can be seen below:
+
+![general_sheme.png](general_sheme.png)
+
 
 ## To start a project by your own you have to:
 
