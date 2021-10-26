@@ -1,72 +1,80 @@
-# Spring security part 2
+## General info
+I have created this "Cinema app" project to demonstrate my expertise Spring MVC, Spring Security, Spring Data, Hibernate, Servlet API, H2, JSTL
+This project was created for online booking of tickets for cinema performances. Users can view the session schedule, stage selection and ticket reservations. Administrators can manage sessions, movie performances, etc.
 
-- Configure DB authentication instead of In memory authentication
-- Add Role entity, Dao and Service layer for it.
-    ```java
-      public interface RoleService {
-          void add(Role role);
-      
-          Role getRoleByName(String roleName);
-      }
-    ```
-
-- Configure role access to specific resources for `ADMIN` and for `USER`.
-  You should configure access to __all endpoints__ in your application. Example:
+## Technologies
+In project these technologies have been used:
 ```
-POST: /register - all
-GET: /cinema-halls - user/admin
-POST: /cinema-halls - admin
-GET: /movies - user/admin
-POST: /movies - admin
-GET: /movie-sessions/available - user/admin
-GET: /movie-sessions/{id} - user/admin
-POST: /movie-sessions - admin
-PUT: /movie-sessions/{id} - admin
-DELETE: /movie-sessions/{id} - admin
-GET: /orders - user
-POST: /orders/complete - user
-PUT: /shopping-carts/movie-sessions - user
-GET: /shopping-carts/by-user - user
-GET: /users/by-email - admin
-...
-``` 
+* Java 11
+* MySQL
+* Spring
+* Hibernate
+* Tomcat 9.0.50 (to run app locally)
 
-HINT:
-- It's up to you what type for RoleName field to choose(String/Enum) but enum would be preferable in most cases.
-- Roles and first Admin user can be injected inside DataInitializer class using annotation @PostConstruct.
-```java
-@PostConstruct
-public void inject() {
-  Role adminRole = new Role();
-  adminRole.setName("ADMIN");
-  roleService.add(adminRole);
-  Role userRole = new Role();
-  userRole.setName("USER");
-  roleService.add(userRole);
-  User user = new User();
-  user.setEmail("admin@i.ua");
-  user.setPassword("admin123");
-  user.setRoles(Set.of(adminRole));
-  userService.add(user);
-}
-```
-- You can specify the different HTTP method access for the same endpoint. For example:
-
-```plainjava
-        protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/movies/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET,"/movies/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .permitAll()
-                .and()
-                .httpBasic()
-                .and()
-                .csrf().disable();
-    }
 ```
 
-__You can check yourself using this__ [checklist](https://mate-academy.github.io/jv-program-common-mistakes/java-spring/security-part-2/jv-spring-security-checklist)
+## Credentials
+<table width="100%" cellspacing="0" cellpadding="5">
+   <tr> 
+        <td valign="top" align="center"><b>&nbsp;</b></td>
+        <td valign="top" align="center"><b>Guest</b></td>
+        <td valign="top" align="center"><b>Registered user</b></td>
+        <td valign="top" align="center"><b>Admin</b></td>
+   </tr>
+    <tr> 
+        <td valign="top" align="center"><b>Registration</b></td>
+        <td valign="top" align="center"><b>+</b></td>
+        <td valign="top" align="center"><b>-</b></td>
+        <td valign="top" align="center"><b>-</b></td>
+   </tr>
+    <tr> 
+        <td valign="top" align="center"><b>View available sessions</b></td>
+        <td valign="top" align="center"><b>+</b></td>
+        <td valign="top" align="center"><b>+</b></td>
+        <td valign="top" align="center"><b>+</b></td>
+   </tr>
+    <tr> 
+        <td valign="top" align="center"><b>Process the order</b></td>
+        <td valign="top" align="center"><b>-</b></td>
+        <td valign="top" align="center"><b>+</b></td>
+        <td valign="top" align="center"><b>+</b></td>
+   </tr>
+    <tr> 
+        <td valign="top" align="center"><b>View orders history</b></td>
+        <td valign="top" align="center"><b>-</b></td>
+        <td valign="top" align="center"><b>+</b></td>
+        <td valign="top" align="center"><b>+</b></td>
+   </tr>
+    <tr> 
+        <td valign="top" align="center"><b>View registered users</b></td>
+        <td valign="top" align="center"><b>-</b></td>
+        <td valign="top" align="center"><b>-</b></td>
+        <td valign="top" align="center"><b>+</b></td>
+   </tr>
+    <tr> 
+        <td valign="top" align="center"><b>Delete users</b></td>
+        <td valign="top" align="center"><b>-</b></td>
+        <td valign="top" align="center"><b>-</b></td>
+        <td valign="top" align="center"><b>+</b></td>
+   </tr>
+    <tr> 
+        <td valign="top" align="center"><b>View all orders</b></td>
+        <td valign="top" align="center"><b>-</b></td>
+        <td valign="top" align="center"><b>-</b></td>
+        <td valign="top" align="center"><b>+</b></td>
+   </tr>
+  </table>
+
+
+## To start a project by your own you have to:
+
+1️⃣ Clone this project into your local directory and open the project in an IDE.
+
+2️⃣ To configure the MySQL DBMS, provide the database URL and password, and username 
+        in the project directory. <a href="https://github.com/konstde00/cinema-app/blob/main/src/main/resources/db.properties">resources/db.properties</a>.</li>
+
+3️⃣ Configure Apache Tomcat (I recomend you to use Tomcat 9.0.54)
+
+4️⃣  Run Tomcat 🚀 
+
+5️⃣ To register send request with body {"email":"testmail@gmail.com", "password":"correctPassword4u", "repeatPassword":"correctPassword4u"} to /register of yours host   
